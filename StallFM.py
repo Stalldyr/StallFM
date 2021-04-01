@@ -183,10 +183,3 @@ class stallFM:
             self.album_data = self.album_data.head(self.limit)
 
             return self.album_data
-
-test = stallFM(limit=150,start_date=datetime(2021,1,1),writetocsv=True)
-test.read_top_file()
-test.clean_data()
-
-for i in range(1971,2021):
-    test.get_top_album_of_release_year(i,limit=1)
