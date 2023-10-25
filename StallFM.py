@@ -10,9 +10,6 @@ from datetime import datetime
 from http.client import HTTPSConnection
 from urllib.parse import quote_plus
 from xml.dom import Node, minidom
-from flask import Flask, render_template, request
-
-app = Flask(__name__)
 
 # You have to have your own unique two values for API_KEY and API_SECRET
 # Obtain yours from https://www.last.fm/api/account/create for Last.fm
@@ -91,7 +88,6 @@ class stallFM:
         return params
 
     def get_page_count(self):
-        #delete??
         params = self.get_params(1)
         doc = self.extract_data(params)
 
@@ -183,7 +179,7 @@ class stallFM:
     ### RECENT TRACKS ###
     ###               ###
 
-    #Useful if you want to select tracks within in a specific time interval. Otherwise use ....
+    #Useful if you want to select tracks within in a specific time interval.
 
     def sort_library(self):
         #Sorts the dataframe either by albums or tracks as chosen. 
@@ -194,7 +190,7 @@ class stallFM:
         elif self.releasetype == RECENTTRACKS:
             self.df = self.sort_recent_tracks()
         else:
-            print("Wrong release type")
+            NameError("Wrong release type")
 
         return self.df
 
@@ -375,40 +371,4 @@ def get_mbinfo_from_search(df):
 
 
 if __name__ == "__main__":
-    lastfm_data = stallFM("Stalldyr", limit=10, releasetype=ALBUMS)
-    #lastfm_data.fix_missing_values()
-    #lastfm_data.add_mbid_info_to_dataframe()
-    #lastfm_data.remove_bad_releases_from_dataframe()
-    #sorted_lastfm_data= lastfm_data.get_top_album_of_release_year(release_year="1991")
-
-    print(lastfm_data.df)
-
-    #app.run(debug=True)
-
-
-@app.route("/form")
-def form():
-    return render_template("form.html")
-    
-
-@app.route("/data", methods=["POST"])
-def data():
-    lastfm_form = request.form
-    lastfm_data = stallFM(lastfm_form["username"], limit=int(lastfm_form["limit"]), releasetype=lastfm_form["releasetype"])
-    lastfm_data.create_dataframe()
-    #lastfm_data.fix_missing_values()
-    lastfm_data.add_mbid_info_to_dataframe()
-    lastfm_data.remove_bad_releases_from_dataframe()
-    sorted_lastfm_data= lastfm_data.get_top_album_of_release_year(release_year=int(lastfm_form["release_year"]))
-    return sorted_lastfm_data.to_html()
-
-
-@app.route("/test")
-def hello_tester():
-    return "<p>hello tester!</p>"
-
-
-###Run sequence###
-#env:FLASK_APP="StallFM\StallFM"
-#env:FLASK_ENV="development"
-#flask run
+    lastfm_data = stallFM(username)
